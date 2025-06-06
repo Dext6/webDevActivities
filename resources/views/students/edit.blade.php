@@ -34,7 +34,7 @@
     </form>
 
     <br>
-    <a href="/students">Back to Student List</a>
+    <a href="/dashboard">Back to dashboard</a>
 
 </body>
 </html>

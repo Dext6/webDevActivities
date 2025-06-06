@@ -1,12 +1,24 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ProfileController;
+use App\Models\Student;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {return view('welcome');});
-Route::get('/students', [StudentController::class, 'index']);   //view
-Route::get('/students/create', [StudentController::class, 'create']); //Show form
-Route::post('/students', [StudentController::class, 'store']);        //save student
-Route::get('/students/{id}/edit', [StudentController::class, 'edit']);
-Route::put('/students/{id}', [StudentController::class, 'update']);
-Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    $students = Student::all();
+    return view('dashboard', compact('students'));
+})->middleware(['auth'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::resource('/students', StudentController::class);
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

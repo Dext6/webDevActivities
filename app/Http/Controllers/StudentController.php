@@ -41,7 +41,7 @@ class StudentController extends Controller
     ]);
 
     // Redirect to students list with success message
-    return redirect('/students')->with('success', 'Student created successfully!');
+    return redirect('/dashboard')->with('success', 'Student created successfully!');
     }
 
     // Show edit form
@@ -63,7 +63,7 @@ class StudentController extends Controller
     $student = \App\Models\Student::findOrFail($id);
     $student->update($request->all());
 
-    return redirect('/students')->with('success', 'Student updated successfully!');
+    return redirect('/dashboard')->with('success', 'Student updated successfully!');
     }
 
     // Delete a student
@@ -72,7 +72,7 @@ class StudentController extends Controller
     $student = \App\Models\Student::findOrFail($id);
     $student->delete();
 
-    return redirect('/students')->with('success', 'Student deleted successfully!');
+    return redirect('/dashboard')->with('success', 'Student deleted successfully!');
     }
 
 }
