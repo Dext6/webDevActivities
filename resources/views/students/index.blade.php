@@ -6,6 +6,8 @@
 <body>
 
     <h1>Students List</h1>
+    <a href="/students/create">Add New Student</a>
+
 
     <table border="1" cellpadding="10">
         <thead>
