@@ -44,8 +44,35 @@ class StudentController extends Controller
     return redirect('/students')->with('success', 'Student created successfully!');
     }
 
+    // Show edit form
+    public function edit($id)
+    {
+    $student = \App\Models\Student::findOrFail($id);
+    return view('students.edit', compact('student'));
+    }
 
+    // Handle form update
+    public function update(Request $request, $id)
+    {
+    $request->validate([
+        'fname' => 'required|string|max:255',
+        'age' => 'required|integer|min:1',
+        'address' => 'required|string|max:255',
+    ]);
 
+    $student = \App\Models\Student::findOrFail($id);
+    $student->update($request->all());
 
+    return redirect('/students')->with('success', 'Student updated successfully!');
+    }
+
+    // Delete a student
+    public function destroy($id)
+    {
+    $student = \App\Models\Student::findOrFail($id);
+    $student->delete();
+
+    return redirect('/students')->with('success', 'Student deleted successfully!');
+    }
 
 }
