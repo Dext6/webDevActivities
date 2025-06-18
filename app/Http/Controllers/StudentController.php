@@ -3,76 +3,57 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Student; // Import the Student model
+use App\Models\Student;
 
 class StudentController extends Controller
 {
     public function index()
     {
-        // Get all students from the database
-        $students = Student::all();
-
-        //dd($students);
-
-        // Return a view and pass the students data
-        return view('students.index', compact('students'));
+        return view('students.index', [
+            'students' => Student::all(),
+        ]);
     }
 
     public function create()
     {
-    // Show the create student form
-    return view('students.create');
+        return view('students.create');
     }
 
     public function store(Request $request)
     {
-    // Validate the incoming data
-    $request->validate([
-        'fname' => 'required|string|max:255',
-        'age' => 'required|integer|min:1',
-        'address' => 'required|string|max:255',
-    ]);
+        $data = $request->validate([
+            'fname' => ['required', 'string', 'max:255'],
+            'age' => ['required', 'integer', 'min:1'],
+            'address' => ['required', 'string', 'max:255'],
+        ]);
 
-    // Create and save new student
-    \App\Models\Student::create([
-        'fname' => $request->fname,
-        'age' => $request->age,
-        'address' => $request->address,
-    ]);
+        Student::create($data);
 
-    // Redirect to students list with success message
-    return redirect('/dashboard')->with('success', 'Student created successfully!');
+        return redirect()->route('dashboard')->with('success', 'Student created successfully!');
     }
 
-    // Show edit form
-    public function edit($id)
+    public function edit(Student $student)
     {
-    $student = \App\Models\Student::findOrFail($id);
-    return view('students.edit', compact('student'));
+        return view('students.edit', compact('student'));
     }
 
-    // Handle form update
-    public function update(Request $request, $id)
+    public function update(Request $request, Student $student)
     {
-    $request->validate([
-        'fname' => 'required|string|max:255',
-        'age' => 'required|integer|min:1',
-        'address' => 'required|string|max:255',
-    ]);
+        $data = $request->validate([
+            'fname' => ['required', 'string', 'max:255'],
+            'age' => ['required', 'integer', 'min:1'],
+            'address' => ['required', 'string', 'max:255'],
+        ]);
 
-    $student = \App\Models\Student::findOrFail($id);
-    $student->update($request->all());
+        $student->update($data);
 
-    return redirect('/dashboard')->with('success', 'Student updated successfully!');
+        return redirect()->route('dashboard')->with('success', 'Student updated successfully!');
     }
 
-    // Delete a student
-    public function destroy($id)
+    public function destroy(Student $student)
     {
-    $student = \App\Models\Student::findOrFail($id);
-    $student->delete();
+        $student->delete();
 
-    return redirect('/dashboard')->with('success', 'Student deleted successfully!');
+        return redirect()->route('dashboard')->with('success', 'Student deleted successfully!');
     }
-
 }
